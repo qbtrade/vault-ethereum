@@ -30,9 +30,11 @@ import (
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/ethclient"
+	bip44 "github.com/immutability-io/go-ethereum-hdwallet"
+	"github.com/tyler-smith/go-bip39"
+
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
-	bip44 "github.com/immutability-io/go-ethereum-hdwallet"
 	"github.com/immutability-io/vault-ethereum/util"
 )
 
@@ -499,7 +501,7 @@ func (b *PluginBackend) getData(client *ethclient.Client, fromAddress common.Add
 	}
 	var gasLimitIn *big.Int
 
-	gasLimitIn = util.ValidNumber(data.Get("gas_limit").(string))
+	gasLimitIn = util.ValidNumber(data.GetDefaultOrZero("gas_limit").(string))
 	gasLimit := gasLimitIn.Uint64()
 
 	return &TransactionParams{
